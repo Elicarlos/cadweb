@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% block title %}Categorias{% endblock %}
+{% block cards %}
+
+   
+{% endblock %}
+{%  block titulo_page %}Categorias{% endblock %}
+{% block conteudo %}
+<table class="table table-bordered table-hover mx-auto">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Categoria</th>            
+            <th scope="col">Açoes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lista in lista %}
+        <tr>
+            <td>{{ lista.nome }}</td>
+        
+            <td style="width: 280px;">
+                <button onclick="" class="btn btn-info">Detalhes</button>
+                <button onclick="" class="btn btn-warning">Alterar</button>
+                <button onclick="" class="btn btn-danger">Excluir</button>
+            </td>
+        </tr>
+        {% endfor %}
+        
+    </tbody>
+</table>
+
+{% endblock %}
