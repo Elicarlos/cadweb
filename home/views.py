@@ -8,23 +8,23 @@ def index(request):
 
 
 def categoria(request):
-    lista = [
-        {
-            'nome': 'Eltromestico',
-            'ordem': 1
-        },
-        {
-            'nome': 'Informática',
-            'ordem': 1
-        },
-        {
-            'nome': 'Móveis',
-            'ordem': 1
-        }
-    ]
+    # lista = [
+    #     {
+    #         'nome': 'Eltromestico',
+    #         'ordem': 1
+    #     },
+    #     {
+    #         'nome': 'Informática',
+    #         'ordem': 1
+    #     },
+    #     {
+    #         'nome': 'Móveis',
+    #         'ordem': 1
+    #     }
+    # ]
     contexto = {
-        # 'lista': Categoria.objects.all().order_by('id')
-        'lista': lista
+        'lista': Categoria.objects.all().order_by('id')
+        
     }
     
     return render(request, 'categoria/lista.html', contexto)

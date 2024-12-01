@@ -78,11 +78,15 @@ WSGI_APPLICATION = 'pweb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse('postgres://default:37oEaedRTpMw@ep-cold-bread-72160815.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require')
 }
 
 
