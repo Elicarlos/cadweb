@@ -9,14 +9,18 @@
 <table class="table table-bordered table-hover mx-auto">
     <thead class="thead-dark">
         <tr>
-            <th scope="col">Categoria</th>            
+            <th scope="col">ID</th> 
+            <th scope="col">Categoria</th> 
+            <th scope="col">Ordem</th>           
             <th scope="col">Açoes</th>
         </tr>
     </thead>
     <tbody>
         {% for lista in lista %}
         <tr>
+            <td>{{ lista.id }}</td>
             <td>{{ lista.nome }}</td>
+            <td>{{ lista.ordem }}</td>
         
             <td style="width: 280px;">
                 <button onclick="" class="btn btn-info">Detalhes</button>
