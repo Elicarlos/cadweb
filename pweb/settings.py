@@ -85,8 +85,10 @@ WSGI_APPLICATION = 'pweb.wsgi.application'
 #     }
 # }
 
+
+
 DATABASES = {
-    'default': dj_database_url.parse('postgres://default:37oEaedRTpMw@ep-cold-bread-72160815.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require')
+    'default': dj_database_url.parse('postgres://default:6oxVY0TzQkIR@ep-cold-bread-72160815.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require')
 }
 
 
