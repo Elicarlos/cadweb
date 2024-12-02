@@ -14,7 +14,13 @@
     
 </head>
 <body>
-     
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
      
 
 
@@ -57,7 +63,7 @@
     {% if messages %}
         {% for message in messages %}
             <!-- Alert area start-->
-            <div class="alert alert-{{ message.tags }} {% if message.tags == 'error' %}alert-danger{% endif %}  alert-dismissible">
+            <div class="alert toast-alert alert-{{ message.tags }} {% if message.tags == 'error' %}alert-danger{% endif %}  alert-dismissible">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>    
@@ -138,6 +144,20 @@
 
             
          });
+
+
+         document.addEventListener("DOMContentLoaded", function () {
+                // Seleciona todos os toasts
+                var toastAlerts = document.querySelectorAll('.toast-alert');
+                
+                // Para cada toast, aplica um temporizador para fechá-lo automaticamente
+                toastAlerts.forEach(function (toast) {
+                    setTimeout(function () {
+                        $(toast).alert('close'); // Usa o método do Bootstrap 3 para fechar o alerta
+                    }, 5000); // Tempo em milissegundos (5 segundos neste caso)
+                });
+        });
+
 
     </script>
     

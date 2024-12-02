@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from . models import Categoria
 from . forms import CategoriaForm
+from django.contrib import messages
 
 
 
@@ -36,8 +37,11 @@ def cadastro_categoria(request):
         
         if form.is_valid():
             form.save()
-            
+            messages.success(request, 'Salvo com sucesso!')
             return redirect('categoria')
+        
+        else:
+            messages.warning(request, 'Verifique os campos')
     
     else:
        form =  CategoriaForm() 
