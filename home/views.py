@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . models import Categoria
+from . forms import CategoriaForm
 
 
 
@@ -28,4 +29,27 @@ def categoria(request):
     }
     
     return render(request, 'categoria/lista.html', contexto)
+
+def cadastro_categoria(request):
+    if request.method == "POST":
+        form =  CategoriaForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            
+            return redirect('categoria')
+    
+    else:
+       form =  CategoriaForm() 
+    
+    
+    return render (request, 'categoria/produtoForm.html', {'form': form})
+    
+    
+        
+    
+    
+    
+    
+    
 

@@ -6,6 +6,11 @@
 {% endblock %}
 {%  block titulo_page %}Categorias{% endblock %}
 {% block conteudo %}
+
+
+
+<a href="{% url 'cadastro-categoria' %}">Adicionar Categoria</a>
+
 <table class="table table-bordered table-hover mx-auto">
     <thead class="thead-dark">
         <tr>
@@ -28,6 +33,10 @@
                 <button onclick="" class="btn btn-danger">Excluir</button>
             </td>
         </tr>
+        {% empty %}
+        <td colspan="4" align="center">
+            <p>Sem itens</p>
+        </td>
         {% endfor %}
         
     </tbody>
