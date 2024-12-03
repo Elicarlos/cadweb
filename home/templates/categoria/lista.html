@@ -23,9 +23,13 @@
             <td>{{ lista.ordem }}</td>
         
             <td style="width: 280px;">
-                <button data-id="{{ lista.id }}" onclick="detalhes(this)" class="btn btn-info">Detalhes</button>
+                <!-- <button data-id="{{ lista.id }}" onclick="detalhes(this)" class="btn btn-info">Detalhes</button>
                 <button data-id="{{ lista.id }}"  onclick="alterar(this)" class="btn btn-warning">Alterar</button>
-                <button data-id="{{ lista.id }}"  onclick="deletar(this)" class="btn btn-danger">Excluir</button>
+                <button data-id="{{ lista.id }}"  onclick="deletar(this)" class="btn btn-danger">Excluir</button> -->
+
+                <a href="{% url 'detalhes_categoria' lista.id %}" class="btn btn-info">Detalhes</a>
+                <a href="{% url 'editar_categoria' lista.id %}" class="btn btn-warning">Alterar</a>
+                <a href="{% url 'excluir_categoria' lista.id %}" class="btn btn-danger">Excluir</a>
             </td>
         </tr>
         {% empty %}
@@ -41,7 +45,15 @@
 
     function detalhes(button){
         const id = button.getAttribute('data-id');
-        console.log(id)
+        
+        fetch(`{% url 'detalhes_categoria' 0 %}` .replace('0', id), {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`)
+            }
+        })
 
     }
 </script>

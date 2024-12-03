@@ -3,12 +3,6 @@
 
 {%  block titulo_page %}Detalhes{% endblock %}
 {% block conteudo %}
-<form action="" method="post">
-    {% csrf_token %}
 
-    {{ form.as_p }}
-    <button class="btn btn-primary">Salvar</button>
-
-</form>
-
+{{ categoria.nome }}
 {% endblock %}

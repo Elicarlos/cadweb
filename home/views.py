@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from . models import Categoria
 from . forms import CategoriaForm
 from django.contrib import messages
@@ -51,9 +51,42 @@ def cadastro_categoria(request):
     
     
 def editar_categoria(request, id):
-    categoria = Categoria.objects.filter(id=id)
-    form = CategoriaForm(instance=categoria)
-    return render(request, 'categoria/edite.html', {'form': form}) 
+    categoria = get_object_or_404(Categoria, id=id)
+    
+    if request.method == "POST":
+        form  = CategoriaForm(request.POST, instance=categoria)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Categoria atualizada com successo')
+            return redirect('categoria')
+            
+        else:
+            messages.warning(request, 'Vefique e dados e tente novamente')
+            
+    else:
+        
+        form = CategoriaForm(instance=categoria)
+    
+    return render(request, 'categoria/editar.html', {'form': form})
+
+
+def detalhes_categoria(request, id):
+    
+    
+    categoria = get_object_or_404(Categoria, id=id)   
+   
+    context = {
+        'categoria': categoria
+    }
+    return render(request, 'categoria/detalhes.html', context) 
+
+def excluir_categoria(request, id):
+    categoria  = get_object_or_404(Categoria, id=id)
+    categoria.delete()
+    messages.success(request, 'Categoria deletada com sucesso!')
+    return redirect('categoria')
+    
     
     
     
