@@ -14,17 +14,6 @@
     
 </head>
 <body>
-    {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-     
-
-
-
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="text-center text-white mb-3">
@@ -60,6 +49,8 @@
         <div class="container-fluid mt-4">
 
 
+
+
     {% if messages %}
         {% for message in messages %}
             <!-- Alert area start-->
@@ -75,9 +66,6 @@
 
 
             <div class="row">
-
-            
-
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card card-custom">
                         <div class="card-header card-header-custom">
