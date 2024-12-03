@@ -1,16 +1,15 @@
 {% extends 'base.html'%}
 {% block title %}Categorias{% endblock %}
-{% block cards %}
-<h1>OOOO</h1>
-   
+{% block cards %}   
+    <a class="btn btn-primary" href="{% url 'cadastro-categoria' %}" style="width:200px;">Adicionar Categoria</a>     
 {% endblock %}
+
 {%  block titulo_page %}Categorias{% endblock %}
 {% block conteudo %}
 
 
 
-<a href="{% url 'cadastro-categoria' %}">Adicionar Categoria</a>
-<br>
+
 
 <table class="table table-bordered table-hover mx-auto">
     <thead class="thead-dark">

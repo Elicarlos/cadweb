@@ -46,21 +46,26 @@
         </nav>
 
         <!-- Dashboard Content -->
-        <div class="container-fluid mt-4">
+        <div class="container-fluid mt-4" style="display: flex; flex-direction: column; gap: 20px;">
+            {% block cards %}           
+            {% endblock %}
 
 
-
-
-    {% if messages %}
-        {% for message in messages %}
-            <!-- Alert area start-->
-            <div class="alert toast-alert alert-{{ message.tags }} {% if message.tags == 'error' %}alert-danger{% endif %}  alert-dismissible">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>    
-            <!-- Alert area End-->
-        {% endfor %}
-    {% endif %}
+            <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="toast align-items-center text-bg-{{ message.tags|default:'primary' }} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    {{ message }}
+                                </div>
+                                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            
 
         
 
@@ -135,16 +140,13 @@
 
 
          document.addEventListener("DOMContentLoaded", function () {
-                // Seleciona todos os toasts
-                var toastAlerts = document.querySelectorAll('.toast-alert');
-                
-                // Para cada toast, aplica um temporizador para fechá-lo automaticamente
-                toastAlerts.forEach(function (toast) {
-                    setTimeout(function () {
-                        $(toast).alert('close'); // Usa o método do Bootstrap 3 para fechar o alerta
-                    }, 5000); // Tempo em milissegundos (5 segundos neste caso)
-                });
-        });
+    // Inicializar todos os toasts presentes na página
+    const toastElements = document.querySelectorAll('.toast');
+    toastElements.forEach(function (toastElement) {
+        const toast = new bootstrap.Toast(toastElement, { delay: 5000 }); // 5 segundos
+        toast.show();
+    });
+});
 
 
     </script>
