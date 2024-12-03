@@ -50,9 +50,10 @@ def cadastro_categoria(request):
     return render (request, 'categoria/produtoForm.html', {'form': form})
     
     
-        
-    
-    
+def editar_categoria(request, id):
+    categoria = Categoria.objects.filter(id=id)
+    form = CategoriaForm(instance=categoria)
+    return render(request, 'categoria/edite.html', {'form': form}) 
     
     
     

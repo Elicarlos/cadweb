@@ -6,11 +6,6 @@
 
 {%  block titulo_page %}Categorias{% endblock %}
 {% block conteudo %}
-
-
-
-
-
 <table class="table table-bordered table-hover mx-auto">
     <thead class="thead-dark">
         <tr>
@@ -28,9 +23,9 @@
             <td>{{ lista.ordem }}</td>
         
             <td style="width: 280px;">
-                <button onclick="" class="btn btn-info">Detalhes</button>
-                <button onclick="" class="btn btn-warning">Alterar</button>
-                <button onclick="" class="btn btn-danger">Excluir</button>
+                <button data-id="{{ lista.id }}" onclick="detalhes(this)" class="btn btn-info">Detalhes</button>
+                <button data-id="{{ lista.id }}"  onclick="alterar(this)" class="btn btn-warning">Alterar</button>
+                <button data-id="{{ lista.id }}"  onclick="deletar(this)" class="btn btn-danger">Excluir</button>
             </td>
         </tr>
         {% empty %}
@@ -41,5 +36,15 @@
         
     </tbody>
 </table>
+
+<script>
+
+    function detalhes(button){
+        const id = button.getAttribute('data-id');
+        console.log(id)
+
+    }
+</script>
+
 
 {% endblock %}
