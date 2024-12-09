@@ -7,5 +7,8 @@ urlpatterns = [
     path('cadastro-categoria/', views.cadastro_categoria, name='cadastro-categoria'),
     path('editar-categoria/<int:id>/', views.editar_categoria, name='editar_categoria'),
     path('detalhes-categoria/<int:id>/', views.detalhes_categoria, name='detalhes_categoria'),
-    path('excluir-categoria/<int:id>/', views.excluir_categoria, name='excluir_categoria')
+    path('excluir-categoria/<int:id>/', views.excluir_categoria, name='excluir_categoria'),
+    
+    path('produtos/', views.produtos, name="produtos"),
+    path("cadastro-produto/", views.cadastro_produto, name="cadastro-produto")
 ]

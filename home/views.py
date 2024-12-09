@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from . models import Categoria
-from . forms import CategoriaForm
+from . models import Categoria, Produto, Pedido, Cliente,  ItemPedido
+from . forms import CategoriaForm, ProdutoForm
 from django.contrib import messages
 
 
@@ -86,6 +86,29 @@ def excluir_categoria(request, id):
     categoria.delete()
     messages.success(request, 'Categoria deletada com sucesso!')
     return redirect('categoria')
+
+
+
+def produtos(request):
+    lista = Produto.objects.all().order_by('-id')
+    return render(request, 'produto/lista.html', {'lista': lista})
+
+
+def cadastro_produto(request):
+    if request.method == "POST":
+        form = ProdutoForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Produto salvo com sucesso')
+            return redirect('produtos')
+            
+        else:
+            messages.warning(request, 'Vefique os dados digitados')   
+    else:
+        form = ProdutoForm()
+    
+    return render(request, 'produto/form.html', {'form': form})
     
     
     
