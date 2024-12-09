@@ -19,3 +19,5 @@ class CategoriaForm(forms.ModelForm):
         model = Categoria
         
         fields = '__all__'
+        
+        exclude = ['criado_por']

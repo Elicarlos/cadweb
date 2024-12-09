@@ -43,7 +43,7 @@ class Pedido(Base):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     
     def __str__(self):
-        return f'Pedido: {self.id}'
+        return f'{self.cliente}'
     
     
 
