@@ -25,7 +25,7 @@ def categoria(request):
     #     }
     # ]
     contexto = {
-        'lista': Categoria.objects.all().order_by('id')
+        'lista': Categoria.objects.all().order_by('-id')
         
     }
     

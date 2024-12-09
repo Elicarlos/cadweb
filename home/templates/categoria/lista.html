@@ -29,7 +29,8 @@
 
                 <a href="{% url 'detalhes_categoria' lista.id %}" class="btn btn-info">Detalhes</a>
                 <a href="{% url 'editar_categoria' lista.id %}" class="btn btn-warning">Alterar</a>
-                <a href="{% url 'excluir_categoria' lista.id %}" class="btn btn-danger">Excluir</a>
+                <!-- <a href="{% url 'excluir_categoria' lista.id %}" class="btn btn-danger">Excluir</a> -->
+                <!-- <button data-id="{{ lista.id }}"  onclick="location='{% url 'editar_categoria' lista.id %}'" class="btn btn-danger">Excluir</button> -->
             </td>
         </tr>
         {% empty %}
