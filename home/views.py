@@ -1,32 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from . models import Categoria, Produto, Pedido, Cliente,  ItemPedido
-from . forms import CategoriaForm, ProdutoForm
+from . forms import CategoriaForm, ProdutoForm, ClienteForm
 from django.contrib import messages
 
 
 
 def index(request):
-    return render(request,'index.html')
-
+    quant_produtos = Produto.objects.all().count()
+    contexto = {
+        'quant_produtos': quant_produtos
+    }
+    
+    return render(request,'index.html', contexto)
 
 def categoria(request):
-    # lista = [
-    #     {
-    #         'nome': 'Eltromestico',
-    #         'ordem': 1
-    #     },
-    #     {
-    #         'nome': 'Informática',
-    #         'ordem': 1
-    #     },
-    #     {
-    #         'nome': 'Móveis',
-    #         'ordem': 1
-    #     }
-    # ]
     contexto = {
-        'lista': Categoria.objects.all().order_by('-id')
-        
+        'lista': Categoria.objects.all().order_by('-id')        
     }
     
     return render(request, 'categoria/lista.html', contexto)
@@ -48,8 +37,7 @@ def cadastro_categoria(request):
     
     
     return render (request, 'categoria/produtoForm.html', {'form': form})
-    
-    
+      
 def editar_categoria(request, id):
     categoria = get_object_or_404(Categoria, id=id)
     
@@ -70,9 +58,7 @@ def editar_categoria(request, id):
     
     return render(request, 'categoria/editar.html', {'form': form})
 
-
 def detalhes_categoria(request, id):
-    
     
     categoria = get_object_or_404(Categoria, id=id)   
    
@@ -87,12 +73,9 @@ def excluir_categoria(request, id):
     messages.success(request, 'Categoria deletada com sucesso!')
     return redirect('categoria')
 
-
-
 def produtos(request):
     lista = Produto.objects.all().order_by('-id')
     return render(request, 'produto/lista.html', {'lista': lista})
-
 
 def cadastro_produto(request):
     if request.method == "POST":
@@ -110,7 +93,80 @@ def cadastro_produto(request):
     
     return render(request, 'produto/form.html', {'form': form})
     
+def detalhes_produto(request, id):
+    produto = get_object_or_404(Produto, id=id)
     
+    return render(request, 'produto/detalhes.html', {'produto': produto})
+
+def editar_produto(request, id):
+    produto = get_object_or_404(Produto, id=id)
     
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, instance=produto)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Atualizado com sucesso')
+            return redirect('produtos')
+        
+        else:
+            messages.warning(request, "Verifique os dados digitados")
+            
+    else:
+        form = ProdutoForm(instance=produto)
+            
+    return render(request, 'produto/editar.html', {'form': form})
+
+def excluir_produto(request, id):
+    produto = get_object_or_404(Produto, id)
+    produto.delete()
+    messages.success(request, 'Produto deletado com sucesso')
+    return redirect('produtos')
+
+def clientes(request):
+    lista = Cliente.objects.all().order_by('-id')
+    return render(request, 'cliente/lista.html', {'lista': lista})
+
+def cadastro_cliente(request):
+    if request.method ==  "POST":
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cliente salvo com sucesso')
+            return redirect('clientes')
+        
+        else:
+            messages.warning(request, 'Verifique os dados e tente novamente')
+            
+    else:
+        form = ClienteForm()
+        
+    return render(request, 'cliente/form.html', {'form': form})
     
+def editar_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    if request.method == "POST":
+        form =  ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Cliente atualizado com sucesso")
+            return redirect('clientes')
+        
+        else:
+            messages(request, "Verifique os dados e tente novamente")
+            
+    else:
+        form = ClienteForm(instance=cliente)
+        
+    return render(request, 'cliente/editar.html', {'form': form})
+
+def detalhes_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    return render(request, 'cliente/detalhes.html', {'cliente': cliente})
+
+def excluir_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    cliente.delete()
+    messages.warning(request, 'Cliente deletado com sucesso')
+    return redirect('clientes')
 

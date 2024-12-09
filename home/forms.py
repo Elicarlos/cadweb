@@ -1,4 +1,4 @@
-from . models import Categoria, Produto
+from . models import Categoria, Cliente, Produto
 from django import forms
 
 class CategoriaForm(forms.ModelForm):
@@ -47,4 +47,23 @@ class ProdutoForm(forms.ModelForm):
         model = Produto
         fields = '__all__'
         exclude = ['criado_por']
+        
+class ClienteForm(forms.ModelForm):
+    nome = forms.CharField(
+        label="Nome",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'})
+        
+    )
+    
+    telefone = forms.CharField(
+        label="Telefone",
+        widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Telefone'})
+    )
+    
+    class Meta:
+        model = Cliente
+        
+        fields = '__all__'
+        exclude = ['criado_por']
+    
     
