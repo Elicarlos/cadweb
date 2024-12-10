@@ -7,8 +7,10 @@ from django.contrib import messages
 
 def index(request):
     quant_produtos = Produto.objects.all().count()
+    quant_clientes = Cliente.objects.all().count()
     contexto = {
-        'quant_produtos': quant_produtos
+        'quant_produtos': quant_produtos,
+        'quant_clientes': quant_clientes
     }
     
     return render(request,'index.html', contexto)

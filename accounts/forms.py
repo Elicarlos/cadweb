@@ -4,9 +4,19 @@ from .models import Usuario
 from django.contrib.auth.forms import AuthenticationForm
 
 class RegistroForm(forms.ModelForm):
-    email =  forms.EmailField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirme a sua senha")
+    nome_completo = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    
+    telefone = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    email =  forms.EmailField(required=True,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    password_confirm = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control"}), label="Confirme a sua senha")
     
     class Meta:
         model = Usuario
@@ -43,4 +53,7 @@ class RegistroForm(forms.ModelForm):
         return user
     
 class CustomAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(widget=forms.TextInput(attrs={'autofocus': True}), label='Email')  
+    username = forms.EmailField(widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control'}), label='Email')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "class": "form-control"
+    }))  
