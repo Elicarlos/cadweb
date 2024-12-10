@@ -54,7 +54,7 @@ body {
 }
 
 .card {
-    background-color: red;
+    border-radius: 0px;
 }
 
 
