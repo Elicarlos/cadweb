@@ -4,8 +4,10 @@ from . forms import CategoriaForm, ProdutoForm, ClienteForm
 from django.contrib import messages
 
 
+def index(request):   
+    return render(request,'index.html')
 
-def index(request):
+def dashboard(request):
     quant_produtos = Produto.objects.all().count()
     quant_clientes = Cliente.objects.all().count()
     contexto = {
@@ -13,7 +15,7 @@ def index(request):
         'quant_clientes': quant_clientes
     }
     
-    return render(request,'index.html', contexto)
+    return render(request,'dashboard.html', contexto)
 
 def categoria(request):
     contexto = {
