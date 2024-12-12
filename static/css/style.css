@@ -21,6 +21,7 @@ body {
     color: var(--primary-dark);
     padding-top: 20px;
     transition: all 0.3s;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 .sidebar.active {
     width: 80px;
@@ -53,6 +54,9 @@ body {
 .navbar {
     background-color: var(--primary);
     padding: 10px;
+    margin-left: 0.75rem;
+    
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 .navbar .navbar-brand {
     color: var(--primary-dark);
@@ -63,7 +67,9 @@ body {
 }
 
 .card {
-    border-radius: 0px;
+    border-radius: 0.25rem;
+    border: none;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -101,10 +107,6 @@ body {
     padding: 5px;
 }
 
-h5{
-    margin: 5px;
-
-}
 
 
 .errorlist {
@@ -121,7 +123,7 @@ h5{
         padding: 10px;
 }
 
-.fieldset {
-    border: 1px solid rgba(0, 0, 0, 0.2); /* Borda clarinha */
+/* .fieldset {
+    border: 1px solid rgba(0, 0, 0, 0.2); 
     font-size: 1rem;
-  }
+  } */
