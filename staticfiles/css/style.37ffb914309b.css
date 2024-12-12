@@ -1,7 +1,14 @@
+:root {
+    --primary: "#0275d8";
+    --grey: "#EFF2FA";
+    
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f6f9;
+    background-color: var(--grey);
 }
+
 .sidebar {
     height: 100vh;
     position: fixed;
@@ -22,7 +29,7 @@ body {
     font-size: 16px;
 }
 .sidebar .nav-link:hover {
-    background-color: #495057;
+    color: var(--primary);
 }
 .sidebar .nav-link .fas {
     margin-right: 10px;
@@ -42,7 +49,7 @@ body {
     margin-left: 80px;
 }
 .navbar {
-    background-color: #3c8dbc;
+    background-color: var(--primary);
     padding: 10px;
 }
 .navbar .navbar-brand {
@@ -54,15 +61,17 @@ body {
 }
 
 .card {
-    background-color: red;
+    border-radius: 0px;
 }
 
 
 .card-custom {
     /* border-radius: 10px; */
+    border-radius: 0px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 .card-header-custom {
+    border-radius: 0px;
     background-color: #3c8dbc;
     color: #fff;
     padding: 10px 5px 5px 15px; 
@@ -106,7 +115,7 @@ h5{
         display: block;
         margin: 20px auto; /* Centraliza horizontalmente e adiciona margem superior */
         border:1px solid #4e4c4cfa;
-        border-radius: 10px;
+        
         padding: 10px;
 }
 
