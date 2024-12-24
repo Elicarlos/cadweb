@@ -45,7 +45,14 @@
                 <div class="col-12">
                 
                     {% csrf_token %}
-                    {{ form.as_p }}   
+                    <div class="mb-3">
+                      <label for="id_username" class="form-label">Email</label>
+                      {{ form.username }}
+                    </div>
+                    <div class="mb-3">
+                      <label for="id_password" class="form-label">Senha</label>
+                      {{ form.password }}
+                    </div>
                  
                 <div class="col-12">
                   <div class="d-grid">
@@ -68,4 +75,6 @@
     </div>
   </div>
 </section>
+
+
 {% endblock %}

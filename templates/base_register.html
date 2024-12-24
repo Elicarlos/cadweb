@@ -18,11 +18,30 @@
             font-size: 3rem;
             color: #0d6efd;
         }
+
+        li {
+            display: inline-block;
+        }
+        li:hover {
+            transform: translateY(-2px);
+            transition: transform 0.3s ease, border-bottom 0.3s ease; 
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1; /* Faz com que o conteúdo principal ocupe o espaço restante */
+        }
+
+       
     </style>
 </head>
 <body>
      <!-- Barra de Navegação -->
- <nav class="navbar navbar-expand-lg navbar-light bg-primary text-white">
+     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container text-white">
         <a class="navbar-brand" href="{% url 'index' %}">CAD Web</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,25 +50,27 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Início</a>
+                    <a class="nav-link text-white" href="{% url 'index' %}">Início</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Funcionalidades</a>
+                    <a class="nav-link text-white" href="#">Funcionalidades</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sobre Nós</a>
+                    <a class="nav-link text-white" href="#">Sobre Nós</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contato</a>
+                    <a class="nav-link text-white" href="#">Contato</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+                    <a class="nav-link text-white" href="{% url 'login' %}">Entrar</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-   {% block content %}{% endblock %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
    <footer class="bg-light text-center py-4">
     <div class="container">
         <p class="mb-0">&copy; 2024 CAD Web. Todos os direitos reservados.</p>

@@ -7,12 +7,12 @@ class CategoriaForm(forms.ModelForm):
         max_length=250,
         widget=forms.TextInput(attrs={"class": "form-control",
                                       "id": "id_nome" ,
-                                      'placeholder': 'Categoria...'})
+                                      })
     )
     ordem = forms.DecimalField(
         label="Ordem",
         max_digits=10,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'id':'id_ordem','placeholder': 'Ordem'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'id':'id_ordem'})
     )    
     class Meta:
         model = Categoria
@@ -53,7 +53,7 @@ class ProdutoForm(forms.ModelForm):
 class ClienteForm(forms.ModelForm):
     nome = forms.CharField(
         label="Nome",
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome'})
+        widget=forms.TextInput(attrs={'class': 'form-control'})
         
     )
     
@@ -64,7 +64,7 @@ class ClienteForm(forms.ModelForm):
     
     telefone = forms.CharField(
         label="Telefone",
-        widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Telefone'})
+        widget=forms.TextInput(attrs={'class':'telefone form-control'})
     )
     
     datanasc = forms.DateField(
