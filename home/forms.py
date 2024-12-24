@@ -5,12 +5,14 @@ class CategoriaForm(forms.ModelForm):
     nome = forms.CharField(
         label="Nome",
         max_length=250,
-        widget=forms.TextInput(attrs={"class": "form-control", 'placeholder': 'Categoria...'})
+        widget=forms.TextInput(attrs={"class": "form-control",
+                                      "id": "id_nome" ,
+                                      'placeholder': 'Categoria...'})
     )
     ordem = forms.DecimalField(
         label="Ordem",
         max_digits=10,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ordem'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'id':'id_ordem','placeholder': 'Ordem'})
     )    
     class Meta:
         model = Categoria
@@ -55,9 +57,19 @@ class ClienteForm(forms.ModelForm):
         
     )
     
+    cpf = forms.CharField(
+        label="CPF",
+        widget=forms.TextInput(attrs={'class': 'cpf form-control'})
+    )
+    
     telefone = forms.CharField(
         label="Telefone",
         widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Telefone'})
+    )
+    
+    datanasc = forms.DateField(
+        label="Data Nascimento",
+        widget=forms.DateInput(attrs={'class': ' data form-control', }, format="%d/%m%Y")
     )
     
     class Meta:

@@ -30,6 +30,7 @@ class Produto(Base):
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     estoque = models.PositiveIntegerField(default=0)
     
+  
     def __str__(self):
         self.nome
     
@@ -37,6 +38,14 @@ class Produto(Base):
 class Cliente(Base):
     nome = models.CharField(max_length=250)
     telefone = models.CharField(max_length=30)
+    cpf = models.CharField(max_length=20, default="01761432389")
+    datanasc = models.DateField(verbose_name="Data de nascimento", default="2024/11/03", null=True, blank=True)
+    
+    @property
+    def datanascimento(self):
+        if self.datanasc:
+            return self.datanasc.strftime("%d/%m/%Y")
+        return None
     
 class Pedido(Base):
     cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True, blank=True)
