@@ -4,6 +4,71 @@
 {%  block titulo_page %}Detalhes{% endblock %}
 {% block conteudo %}
 
-{{ produto.nome }}
-{{ produto.preco}}
+<p>
+    <label >ID:</label><br>
+    <span class="form-control">{{produto.id}}</span>
+   
+ </p>
+ 
+ 
+ <p>
+    <label >Nome:</label><br>
+    <span class="form-control">{{produto.nome}}</span>
+ </p>
+ 
+ 
+ <p>
+    <label >Preoço R$:</label><br>
+    <span class="form-control">{{produto.preco}}</span>
+ </p>
+ 
+ 
+ <p>
+    <label >Imagen:</label><br>
+    <span class="form-control"> 
+       <img  src="{{produto.img_base64}} " width="200" height="200">
+     </span>
+ </p>
+ 
+{% block javascript %}
+<script>
+
+
+    $(document).ready(function() {
+
+        // Configura inicialização das imagens base64 para todo campo da classe img_init
+        $('.img_init').each(function() {
+            const initialImageBase64 = $(this).val();
+            const target_canvas = $(this).data('canvas');
+            if (initialImageBase64) {
+                loadImage(initialImageBase64,target_canvas);
+            }
+        });
+        
+        // Evento acionado quando uma nova imagem é selecionada
+        $('.img_upload').on('change', function(event) {
+            
+            const imagemInput = this.files[0]; // Pega o arquivo selecionado
+            var hidden = $(this).data('hidden');  // Pega o campo hidden associado ao file input
+            if (imagemInput) {
+                const reader = new FileReader();
+                reader.readAsDataURL(imagemInput); // Converte a imagem para base64
+
+                reader.onload = function() {
+                    const imgBase64 = reader.result; // O resultado da conversão
+                    $('#'+hidden).val(imgBase64); // Seta o valor base64 no campo hidden associado ao file input
+                    var canvasTarget = $('#'+hidden).data('canvas'); // pega o canvas associado ao compo hidden
+                    // Exibe a nova imagem no canvas
+                    loadImage(imgBase64,canvasTarget);
+                };
+
+                reader.onerror = function(error) {
+                    console.log('Erro ao converter a imagem: ', error);
+                };
+            }
+        });
+    });
+</script>
+
+{% endblock javascript %}
 {% endblock %}

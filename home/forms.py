@@ -1,4 +1,4 @@
-from . models import Categoria, Cliente, Produto
+from . models import Categoria, Cliente, Estoque, Produto
 from django import forms
 
 class CategoriaForm(forms.ModelForm):
@@ -29,7 +29,7 @@ class ProdutoForm(forms.ModelForm):
     )
     categoria = forms.ModelChoiceField(
         label='Categoria',
-        queryset=Categoria.objects.all(),
+        queryset=Categoria.objects.only('id', 'nome'),
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     
@@ -37,18 +37,26 @@ class ProdutoForm(forms.ModelForm):
         label="Preco",
         decimal_places=2,
         max_digits=10,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Preco'})
+        widget=forms.TextInput(attrs={
+            'class': 'money form-control',
+            'maxlength': 500,
+            'placeholder': '0,000,00'})
         
     )
-    estoque = forms.IntegerField(
-        label="Estoque",
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'estoque'})
-    )
+   
+    
+    img_base64 = forms.HiddenInput()
+        
     
     class Meta:
         model = Produto
         fields = '__all__'
         exclude = ['criado_por']
+        
+    def __init__(self, *args, **kwargs):
+        super(ProdutoForm, self).__init__(*args, **kwargs)
+        self.fields['preco'].localize = True
+        self.fields['preco'].widget.is_localized = True
         
 class ClienteForm(forms.ModelForm):
     nome = forms.CharField(
@@ -77,5 +85,19 @@ class ClienteForm(forms.ModelForm):
         
         fields = '__all__'
         exclude = ['criado_por']
+        
+        
+class EstoqueForm(forms.ModelForm):
+    class Meta:
+        model = Estoque
+        fields = ['produto', 'qtde']
+        
+        widgets = {
+            'produto': forms.HiddenInput(),
+            'qtde': forms.TextInput(attrs={'class': 'inteiro form-control',}),
+        }
+        
+    
+        
     
     

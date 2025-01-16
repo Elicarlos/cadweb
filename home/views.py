@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from . models import Categoria, Produto, Pedido, Cliente,  ItemPedido
-from . forms import CategoriaForm, ProdutoForm, ClienteForm
+from . forms import CategoriaForm, EstoqueForm, ProdutoForm, ClienteForm
 from django.contrib import messages
 
 
@@ -173,4 +173,24 @@ def excluir_cliente(request, id):
     cliente.delete()
     messages.warning(request, 'Cliente deletado com sucesso')
     return redirect('clientes')
+
+
+
+
+def ajustar_estoque(reuquest, id):
+    produto = Produto.objects.get(pk=id)
+    estoque = produto.estoque
+    
+    if reuquest.method == 'POST':
+        form = EstoqueForm(reuquest.POST, instance=estoque)
+        if form.is_valid():
+            estoque = form.save()
+            lista = []
+            lista.append(estoque.produto)
+            return render(reuquest, 'produto/lista.html', {'lista': lista})      
+        
+    else:
+        form = EstoqueForm(instance=estoque)
+        
+    return render(reuquest, 'produto/estoque.html', {'form': form}) 
 

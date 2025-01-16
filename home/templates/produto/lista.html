@@ -1,7 +1,9 @@
 {% extends 'base.html'%}
 {% block title %}Categorias{% endblock %}
 {% block cards %}   
-    <a class="btn btn-primary" href="{% url 'cadastro-produto' %}" style="width:200px;">Adicionar Produto</a>     
+    <div class="d-flex justify-content-end  ">
+        <a class="btn btn-primary g-2 d=flex align-items-center" href="{% url 'cadastro-produto' %}"><i class="bi bi-plus-circle"></i><span class="ms-2">Produto</span></a>
+    </div>     
 {% endblock %}
 
 {%  block titulo_page %}Categorias{% endblock %}
@@ -10,10 +12,11 @@
     <thead class="thead-dark">
         <tr>
             <th scope="col">ID</th> 
-            <th scope="col">Nome</th> 
-            <th scope="col">Categoria</th> 
+            <th scope="col">#</th> 
+            <th scope="col">Nome</th>
             <th scope="col">Preço</th>
-            <th scope="col">Estoque</th>              
+            <th scope="col">Categoria</th>            
+            <th scope="col">Qtde</th>              
             <th scope="col">Açoes</th>
         </tr>
     </thead>
@@ -21,19 +24,24 @@
         {% for lista in lista %}
         <tr>
             <td>{{ lista.id }}</td>
+            <td>
+                <img src="{{ lista.img_base64 }}" width="50" height="50" alt="Imagem do Produto">
+            </td>
+            
             <td>{{ lista.nome }}</td>
-            <td>{{ lista.categoria }}</td>
-            <td>{{ lista.preco }}</td>
-            <td>{{ lista.estoque }}</td>
+            <td>{{ lista.preco }}</td> 
+            <td>{{ lista.categoria }}</td> 
+            <td>{{ lista.estoque.qtde }}</td>          
         
             <td style="width: 280px;">
                 <!-- <button data-id="{{ lista.id }}" onclick="detalhes(this)" class="btn btn-info">Detalhes</button>
                 <button data-id="{{ lista.id }}"  onclick="alterar(this)" class="btn btn-warning">Alterar</button>
                 <button data-id="{{ lista.id }}"  onclick="deletar(this)" class="btn btn-danger">Excluir</button> -->
 
-                <a href="{% url 'detalhes_produto' lista.id %}" class="btn btn-info">Detalhes</a>
-                <a href="{% url 'editar_produto' lista.id %}" class="btn btn-warning">Alterar</a>
-                <!-- <a href="{% url 'excluir_categoria' lista.id %}" class="btn btn-danger">Excluir</a> -->
+                <a href="{% url 'detalhes_produto' lista.id %}" data-bs-toggle="tooltip" title="Detalhes" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                <a href="{% url 'ajustar_estoque' lista.id %}" data-bs-toggle="tooltip" title="Estoque" class="btn btn-warning"><i class="bi bi-box"></i></a>
+                <a href="{% url 'editar_produto' lista.id %}" data-bs-toggle="tooltip" title="Editar" class="btn btn-warning"><i class="bi bi-pencil"></i></a>
+                <a href="{% url 'excluir_categoria' lista.id %}" data-bs-toggle="tooltip" title="Excluir" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                 <!-- <button data-id="{{ lista.id }}"  onclick="location='{% url 'editar_categoria' lista.id %}'" class="btn btn-danger">Excluir</button> -->
             </td>
         </tr>
@@ -45,7 +53,7 @@
         
     </tbody>
 </table>
-s
+
 <script>
 
     function detalhes(button){
@@ -61,6 +69,8 @@ s
         })
 
     }
+
+    
 </script>
 
 

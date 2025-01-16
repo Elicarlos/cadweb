@@ -24,15 +24,29 @@ class Categoria(Base):
     def __str__(self):
         return self.nome
     
+
+    
 class Produto(Base):
     nome = models.CharField(max_length=250) 
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
-    preco = models.DecimalField(max_digits=10, decimal_places=2)
-    estoque = models.PositiveIntegerField(default=0)
+    preco = models.DecimalField(max_digits=10, decimal_places=2)    
+    img_base64 = models.TextField(blank=True)
     
-  
+    @property
+    def estoque(self):
+        estoque_item, flag_created = Estoque.objects.get_or_create(produto=self, defaults={'qtde': 0})
+        return estoque_item
+        
+    
     def __str__(self):
-        self.nome
+        return self.nome
+        
+class Estoque(Base):
+    produto = models.ForeignKey(Produto, on_delete=models.PROTECT)
+    qtde = models.IntegerField()
+    
+    def __str__(self):
+        return f'{self.produto} - quantidade: {self.qtde}'
     
     
 class Cliente(Base):
