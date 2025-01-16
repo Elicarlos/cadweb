@@ -1,3 +1,4 @@
+from datetime import date
 from . models import Categoria, Cliente, Estoque, Produto
 from django import forms
 
@@ -79,6 +80,12 @@ class ClienteForm(forms.ModelForm):
         label="Data Nascimento",
         widget=forms.DateInput(attrs={'class': ' data form-control', }, format="%d/%m%Y")
     )
+    
+    def clean_datanasc(self):
+        datanasc = self.cleaned_data.get('datanasc')
+        if datanasc and datanasc > date.today():
+            raise forms.ValidationError("A data de nascimento não pode estar no futuro.")
+        return datanasc
     
     class Meta:
         model = Cliente
