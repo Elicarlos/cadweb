@@ -157,7 +157,7 @@ def editar_cliente(request, id):
             return redirect('clientes')
         
         else:
-            messages(request, "Verifique os dados e tente novamente")
+            messages.error(request, "Verifique os dados e tente novamente")
             
     else:
         form = ClienteForm(instance=cliente)
