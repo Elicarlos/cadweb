@@ -28,11 +28,7 @@ class ProdutoForm(forms.ModelForm):
         max_length=250,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'nome'})
     )
-    categoria = forms.ModelChoiceField(
-        label='Categoria',
-        queryset=Categoria.objects.only('id', 'nome'),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
+   
     
     preco = forms.DecimalField(
         label="Preco",
@@ -53,6 +49,9 @@ class ProdutoForm(forms.ModelForm):
         model = Produto
         fields = '__all__'
         exclude = ['criado_por']
+        widgets = {
+            'categoria': forms.HiddenInput()
+        }
         
     def __init__(self, *args, **kwargs):
         super(ProdutoForm, self).__init__(*args, **kwargs)

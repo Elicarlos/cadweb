@@ -22,7 +22,13 @@ urlpatterns = [
     path('editar_cliente/<int:id>/', views.editar_cliente, name="editar_cliente"),
     path('excluir_cliente/<int:id>/', views.excluir_cliente , name="excluir_cliente"),
     
-    path('ajustar_estoque/<int:id>/', views.ajustar_estoque , name="ajustar_estoque")
+    path('ajustar_estoque/<int:id>/', views.ajustar_estoque , name="ajustar_estoque"),
+    
+    path('teste01/', views.teste_01 , name="teste01"),
+    path('teste02/', views.teste_02 , name="teste02"),
+    path('teste03/', views.teste_03 , name="teste03"),
+    
+    path('buscar_dados/<str:app_modelo>/', views.buscar_dados , name="buscar_dados"),
     
     
     

@@ -1,65 +1,115 @@
-{% extends 'base.html' %}
-{% block title %}Categorias{% endblock %}
+{% extends "base.html" %}
 
-{% block titulo_page %}Cadastro Produto{% endblock %}
 
-{% block conteudo %}
-<form action="" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+{% block titulo_conteudo %} Formulário de Produtos {% endblock titulo_conteudo %}
 
+
+{% block conteudo %} 
+<form method="post">
+    {% csrf_token %}    
     {{ form.as_p }}
 
+
+    <p>
+        <label for="id_categoria_nome">Categoria:</label>
+        <!-- autocomplete -->
+        <input type="text" value="{{form.instance.categoria}}" 
+            class="form-control autocomplete" 
+            id="id_categoria_nome" 
+            data-url="{% url 'buscar_dados' 'home.Categoria' %}" 
+            data-hidden="#id_categoria" placeholder="Categoria" >
+    </p>
+    
+
+
     <fieldset class="fieldset">
-        <label for="image">Imagem:</label>
-        <input type="hidden" id="img_base64" class="img_init" data-canvas="imageCanvas" value="{{ form.instance.img_base64 }}" name="img_base64">
-        <input type="file" id="imagem" name="image" data-hidden="img_base64" class="img_upload form-control" accept="image/*"><br>
-        <canvas class="canvas" id="imageCanvas" width="200" height="200"></canvas><br>
+        <label for="imagem">Imagem:</label>
+        <input type="hidden" 
+            id="img_base64"  
+            class="img_init" 
+            data-canvas="imageCanvas" 
+            value="{{form.instance.img_base64}}" 
+            name="img_base64">
+
+
+        <input type="file" id="imagem" 
+            name="imagem" 
+            data-hidden="img_base64" 
+            class="img_upload form-control" 
+            accept="image/*"><br>
+
+
+        <canvas class="canvas"  id="imageCanvas" width="200" height="200"></canvas><br>
+
+
     </fieldset>
-    <button class="btn btn-primary">Salvar</button>
+
+
+    <p>
+    
+</p>
+
+
+    <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
+
+
+
+
+    
+
+
 </form>
+
+
+{% endblock conteudo %}
+
 
 {% block javascript %}
 <script>
-    $(document).ready(function() {
-        // Função para carregar a imagem inicial no canvas
-        function loadImage(base64, canvasId) {
-            const canvas = document.getElementById(canvasId);
-            const context = canvas.getContext('2d');
-            const img = new Image();
-            img.onload = function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                context.drawImage(img, 0, 0);
-            };
-            img.src = base64;
-        }
 
-        // Carregar imagem base64 inicial
+
+
+
+    $(document).ready(function() {
+
+
+        // Configura inicialização das imagens base64 para todo campo da classe img_init
         $('.img_init').each(function() {
             const initialImageBase64 = $(this).val();
-            const targetCanvas = $(this).data('canvas');
+            const target_canvas = $(this).data('canvas');
             if (initialImageBase64) {
-                loadImage(initialImageBase64, targetCanvas);
+                loadImage(initialImageBase64,target_canvas);
             }
         });
-
-        // Manipular o upload de novas imagens
+        
+        // Evento acionado quando uma nova imagem é selecionada
         $('.img_upload').on('change', function(event) {
-            const file = this.files[0];
-            const hiddenInputId = $(this).data('hidden');
-            const canvasId = $(this).data('canvas');
-            if (file) {
+            
+            const imagemInput = this.files[0]; // Pega o arquivo selecionado
+            var hidden = $(this).data('hidden');  // Pega o campo hidden associado ao file input
+            if (imagemInput) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64 = e.target.result;
-                    $(`#${hiddenInputId}`).val(base64); // Atualizar o input hidden
-                    loadImage(base64, canvasId); // Atualizar o canvas
+                reader.readAsDataURL(imagemInput); // Converte a imagem para base64
+
+
+                reader.onload = function() {
+                    const imgBase64 = reader.result; // O resultado da conversão
+                   
+                    $('#'+hidden).val(imgBase64); // Seta o valor base64 no campo hidden associado ao file input
+                    var canvasTarget = $('#'+hidden).data('canvas'); // pega o canvas associado ao compo hidden
+                    // Exibe a nova imagem no canvas
+                    loadImage(imgBase64,canvasTarget);
                 };
-                reader.readAsDataURL(file);
+
+
+                reader.onerror = function(error) {
+                    console.log('Erro ao converter a imagem: ', error);
+                };
             }
         });
     });
 </script>
-{% endblock %}
 
-{% endblock %}
+
+{% endblock javascript %}
+
