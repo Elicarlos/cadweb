@@ -1,5 +1,5 @@
 from datetime import date
-from . models import Categoria, Cliente, Estoque, Produto
+from . models import Categoria, Cliente, Estoque, ItemPedido, Produto, Pedido, Pagamento
 from django import forms
 
 class CategoriaForm(forms.ModelForm):
@@ -91,8 +91,7 @@ class ClienteForm(forms.ModelForm):
         
         fields = '__all__'
         exclude = ['criado_por']
-        
-        
+               
 class EstoqueForm(forms.ModelForm):
     class Meta:
         model = Estoque
@@ -103,7 +102,46 @@ class EstoqueForm(forms.ModelForm):
             'qtde': forms.TextInput(attrs={'class': 'inteiro form-control',}),
         }
         
-    
+class PedidoForm(forms.ModelForm):    
+    class Meta:
+        model = Pedido
+        fields = ['cliente']
+        widgets = {
+            'cliente': forms.HiddenInput()
+        }
+            
+class ItemPedidoForm(forms.ModelForm):
+    class Meta:
+        model = ItemPedido
+        fields = ['pedido','produto', 'qtde']
+
+
+        widgets = {
+            'pedido': forms.HiddenInput(),  # Campo oculto para armazenar o ID
+            'produto': forms.HiddenInput(),  # Campo oculto para armazenar o ID
+            'qtde':forms.TextInput(attrs={'class': 'form-control',}),
+        }
+
+
+class PagamentoForm(forms.ModelForm):
+    class Meta:
+        model = Pagamento
+        fields = ['pedido','forma','valor']
+        widgets = {
+            'pedido': forms.HiddenInput(),  # Campo oculto para armazenar o ID
+            # Usando Select para renderizar as opções
+            'forma': forms.Select(attrs={'class': 'form-control'}),  
+            'valor':forms.TextInput(attrs={
+                'class': 'money form-control',
+                'maxlength': 500,
+                'placeholder': '0.000,00'
+            }),
+         }
         
+    def __init__(self, *args, **kwargs):
+            super(PagamentoForm, self).__init__(*args, **kwargs)
+            self.fields['valor'].localize = True
+            self.fields['valor'].widget.is_localized = True    
+
     
     

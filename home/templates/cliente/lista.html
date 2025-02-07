@@ -34,7 +34,9 @@
                 <button data-id="{{ lista.id }}"  onclick="alterar(this)" class="btn btn-warning">Alterar</button>
                 <button data-id="{{ lista.id }}"  onclick="deletar(this)" class="btn btn-danger">Excluir</button> -->
 
-                <a href="{% url 'detalhes_cliente' lista.id %}" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                <a href="{% url 'novo_pedido' lista.id %}" class="btn btn-success">
+                    <i class="bi bi-cart-plus"></i>
+                </a>
                 <a href="{% url 'editar_cliente' lista.id %}" class="btn btn-warning"><i class="bi bi-pencil"></i></a>
                 <a href="{% url 'excluir_cliente' lista.id %}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                 <!-- <button data-id="{{ lista.id }}"  onclick="location='{% url 'editar_categoria' lista.id %}'" class="btn btn-danger">Excluir</button> -->

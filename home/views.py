@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from . models import Categoria, Produto, Pedido, Cliente,  ItemPedido
-from . forms import CategoriaForm, EstoqueForm, ProdutoForm, ClienteForm
+from . forms import CategoriaForm, EstoqueForm, ItemPedidoForm, PagamentoForm, ProdutoForm, ClienteForm, PedidoForm
 from django.contrib import messages
 from django.http import JsonResponse
 from django.apps import apps
@@ -176,9 +176,6 @@ def excluir_cliente(request, id):
     messages.warning(request, 'Cliente deletado com sucesso')
     return redirect('clientes')
 
-
-
-
 def ajustar_estoque(reuquest, id):
     produto = Produto.objects.get(pk=id)
     estoque = produto.estoque
@@ -196,20 +193,14 @@ def ajustar_estoque(reuquest, id):
         
     return render(reuquest, 'produto/estoque.html', {'form': form}) 
 
-
-
 def teste_01(request):
     return render(request, 'teste/teste01.html')
-
 
 def teste_02(request):
     return render(request, 'teste/teste02.html')
 
-
 def teste_03(request):
     return render(request, 'teste/teste03.html')
-
-
 
 def buscar_dados(request, app_modelo):
     termo = request.GET.get('q', '') # pega o termo digitado
@@ -228,5 +219,103 @@ def buscar_dados(request, app_modelo):
     dados = [{'id': obj.id, 'nome': obj.nome} for obj in resultados]
     return JsonResponse(dados, safe=False)
 
+def pedido(request):
+    print("aqui")
+    lista = Pedido.objects.all().order_by('-id')
+    return render(request, 'pedido/lista.html', {'lista': lista})
+
+def novo_pedido(request,id):
+    if request.method == 'GET':
+        try:
+            cliente = Cliente.objects.get(pk=id)            
+        except Cliente.DoesNotExist:            
+            messages.error(request, 'Registro não encontrado')
+            return redirect('cliente') 
+        # cria um novo pedido com o cliente selecionado
+        pedido = Pedido(cliente=cliente)
+        form = PedidoForm(instance=pedido)
+        return render(request, 'pedido/form.html',{'form': form,})
+    else:
+        form = PedidoForm(request.POST)
+        if form.is_valid():
+            pedido = form.save()
+            return redirect('pedido')
+
+
+def detalhes_pedido(request, id):
+    try:
+        pedido = Pedido.objects.get(pk=id)
+    except Pedido.DoesNotExist:
+        # Caso o registro não seja encontrado, exibe a mensagem de erro
+        messages.error(request, 'Registro não encontrado')
+        return redirect('pedido')  # Redireciona para a listagem    
     
+    if request.method == 'GET':
+        itemPedido = ItemPedido(pedido=pedido)
+        form = ItemPedidoForm(instance=itemPedido)
+    else: # method Post
+        form = ItemPedidoForm(request.POST)
+        if form.is_valid():
+            item_pedido = form.save(commit=False) # commit=False retorna o objeto item_pedido vindo do form para fazermos modificações adicionais antes de salvá-la, colocar o preço do produto, verificar estoque.
+            item_pedido.preco = item_pedido.produto.preco # acessando o produto do relacionamento
+            # realizar aqui o tratamento do estoque, para isso
+            # Pegar o estoque (item_pedido.produto.estoque do relacionamento) atual 
+            # verificar se a quantidade (item_pedido.produto.estoque.qtde) é suficiente para o item solicitado (tem_pedido.qtde)
+            # Se não houver estoque suficiente, você pode adicionar uma mensagem de erro e não salvar a operação
+            # Se sim, decrementar a quantidade do item no estoque do produto e salvar os objetos estoque e item_pedido
+            item_pedido.save()
+        else:
+             messages.error(request, 'Erro ao adicionar produto')
+                  
+    contexto = {
+        'pedido': pedido,
+        'form': form,
+    }
+    return render(request, 'pedido/detalhes.html',contexto )
+
+
+def remover_item_pedido(request, id):
+    try:
+        item_pedido = ItemPedido.objects.get(pk=id)
+    except ItemPedido.DoesNotExist:
+        # Caso o registro não seja encontrado, exibe a mensagem de erro
+        messages.error(request, 'Registro não encontrado')
+        return redirect('detalhes_pedido', id=id)
+    
+    pedido_id = item_pedido.pedido.id  # Armazena o ID do pedido antes de remover o item
+    estoque = item_pedido.produto.estoque  # Obtém o estoque do produto
+    estoque.qtde += item_pedido.qtde  # Devolve a quantidade do item ao estoque
+    estoque.save()  # Salva as alterações no estoque
+    # Remove o item do pedido
+    item_pedido.delete()
+    messages.success(request, 'Operação realizada com Sucesso')
+
+
+    # Redireciona de volta para a página de detalhes do pedido
+    return redirect('detalhes_pedido', id=pedido_id)
+
+def form_pagamento(request,id):
+    try:
+        pedido = Pedido.objects.get(pk=id)
+    except Pedido.DoesNotExist:
+        # Caso o registro não seja encontrado, exibe a mensagem de erro
+        messages.error(request, 'Registro não encontrado')
+        return redirect('pedido')  # Redireciona para a listagem    
+    
+    if request.method == 'POST':
+        form = PagamentoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Operação realizada com Sucesso')
+    # prepara o formulário para um novo pagamento
+    pagamento = Pagamento(pedido=pedido)
+    form = PagamentoForm(instance=pagamento)
+    contexto = {
+        'pedido': pedido,
+        'form': form,
+    }    
+    return render(request, 'pedido/pagamento.html',contexto)
+
+
+
 
