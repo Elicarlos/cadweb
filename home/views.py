@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from . models import Categoria, Produto, Pedido, Cliente,  ItemPedido
 from . forms import CategoriaForm, EstoqueForm, ItemPedidoForm, PagamentoForm, ProdutoForm, ClienteForm, PedidoForm
 from django.contrib import messages
@@ -219,8 +220,7 @@ def buscar_dados(request, app_modelo):
     dados = [{'id': obj.id, 'nome': obj.nome} for obj in resultados]
     return JsonResponse(dados, safe=False)
 
-def pedido(request):
-    print("aqui")
+def pedido(request):  
     lista = Pedido.objects.all().order_by('-id')
     return render(request, 'pedido/lista.html', {'lista': lista})
 
@@ -239,7 +239,7 @@ def novo_pedido(request,id):
         form = PedidoForm(request.POST)
         if form.is_valid():
             pedido = form.save()
-            return redirect('pedido')
+            return redirect(reverse('detalhes_pedido', args=[pedido.id]))
 
 
 def detalhes_pedido(request, id):

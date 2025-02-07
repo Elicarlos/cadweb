@@ -97,8 +97,6 @@ class Pedido(Base):
         """Calcula o total de todos os itens no pedido, formatado como moeda local"""
         total = sum(item.qtde * item.preco for item in self.itempedido_set.all())
         return total
-
-
     
     @property
     def qtdeItens(self):
@@ -119,6 +117,10 @@ class Pedido(Base):
     @property
     def debito(self):
         return "implementar"
+    
+    @property
+    def produtos_lista(self):
+        return ", ".join(item.produto.nome for item in self.itempedido_set.all())
 
 
     
@@ -131,6 +133,10 @@ class ItemPedido(models.Model):
     
     def __str__(self):
         return f'{self.produto.nome } (Qtd: {self.qtde} - Preço Unitário: {self.preco })'
+    
+    @property
+    def subtotal(self):
+        return self.qtde * self.preco
     
 class Pagamento(models.Model):
     DINHEIRO = 1
