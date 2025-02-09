@@ -120,7 +120,9 @@ class Pedido(Base):
     
     @property
     def produtos_lista(self):
-        return ", ".join(item.produto.nome for item in self.itempedido_set.all())
+        produtos = self.itempedido_set.all()[:3]
+        nomes_produtos = [item.produto.nome for item in produtos]
+        return ", ".join(nomes_produtos)
 
 
     
@@ -138,13 +140,26 @@ class ItemPedido(models.Model):
     def subtotal(self):
         return self.qtde * self.preco
     
+    def verificar_estoque(self):
+        if self.produto.estoque.qtde < self.qtde:
+            return False
+        
+        return True
+    
+    def atualizar_estoque(self):
+        """Decrementa a quantidade do estoque ao salvar um novo item do pedido."""
+        estoque = Estoque.objects.filter(produto=self.produto).first()
+        if estoque and self.verificar_estoque():
+            estoque.qtde -= self.qtde
+            estoque.save()  # Importante! Salva a alteração no banco de dados
+            return True
+        return False
+    
 class Pagamento(models.Model):
     DINHEIRO = 1
     CARTAO = 2
     PIX = 3
     OUTRA = 4
-
-
     FORMA_CHOICES = [
         (DINHEIRO, 'Dinheiro'),
         (CARTAO, 'Cartão'),

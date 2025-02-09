@@ -55,7 +55,7 @@ body {
     background-color: var(--primary);
     padding: 10px;
     margin-left: 0.75rem;
-    width: 100wh;
+    
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 .navbar .navbar-brand {
@@ -107,10 +107,6 @@ body {
     padding: 5px;
 }
 
-h5{
-    margin: 5px;
-
-}
 
 
 .errorlist {

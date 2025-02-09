@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from . models import Categoria, Produto, Pedido, Cliente,  ItemPedido
+from . models import Categoria, Pagamento, Produto, Pedido, Cliente,  ItemPedido
 from . forms import CategoriaForm, EstoqueForm, ItemPedidoForm, PagamentoForm, ProdutoForm, ClienteForm, PedidoForm
 from django.contrib import messages
 from django.http import JsonResponse
@@ -263,7 +263,14 @@ def detalhes_pedido(request, id):
             # verificar se a quantidade (item_pedido.produto.estoque.qtde) é suficiente para o item solicitado (tem_pedido.qtde)
             # Se não houver estoque suficiente, você pode adicionar uma mensagem de erro e não salvar a operação
             # Se sim, decrementar a quantidade do item no estoque do produto e salvar os objetos estoque e item_pedido
-            item_pedido.save()
+            
+            if item_pedido.atualizar_estoque():
+                item_pedido.save()
+                messages.success(request, 'Produto adicionado com sucesso!')
+            
+            else:
+                messages.error(request, "Estoque insuficiente!")
+            
         else:
              messages.error(request, 'Erro ao adicionar produto')
                   
@@ -288,7 +295,7 @@ def remover_item_pedido(request, id):
     estoque.save()  # Salva as alterações no estoque
     # Remove o item do pedido
     item_pedido.delete()
-    messages.success(request, 'Operação realizada com Sucesso')
+    messages.success(request, 'Item removido com sucesso')
 
 
     # Redireciona de volta para a página de detalhes do pedido

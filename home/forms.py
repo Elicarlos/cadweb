@@ -114,6 +114,18 @@ class ItemPedidoForm(forms.ModelForm):
     class Meta:
         model = ItemPedido
         fields = ['pedido','produto', 'qtde']
+        
+        def clean(self):
+            cleaned_data = super().clean()
+            produto = cleaned_data.get('produto')
+            qtde = cleaned_data.get('qtde')
+            
+            
+            if produto and qtde:
+                if produto.estoque.qtde < qtde:
+                    raise forms.ValidationError(f'Estoque insuficiente! Apenas { produto.estoque.qtde} disponivel')
+            
+            return cleaned_data
 
 
         widgets = {
