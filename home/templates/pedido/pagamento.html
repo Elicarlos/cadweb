@@ -24,9 +24,7 @@
     {% csrf_token %}    
     {{ form.as_p }}
     <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
-    <button type="button" onclick="location='{% url 'detalhes_pedido' form.instance.pedido.id %}'" class="btn btn-secondary btn-sm">Voltar</button>
-
-
+    <button type="button" onclick="location.href='{% url 'detalhes_pedido' pedido.id %}'" class="btn btn-secondary btn-sm">Voltar</button>
 </form>
 
 
@@ -45,7 +43,7 @@
     </tr>
   </thead>
   <tbody>
-  {% for pagamento in form.instance.pedido.pagamentos %}
+    {% for pagamento in pagamentos %}
     <tr>
       <td>{{ pagamento.id }}</td>
       <td>{{ pagamento.valor }}</td>

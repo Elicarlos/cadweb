@@ -32,7 +32,12 @@ urlpatterns = [
     path('pedido/', views.pedido, name="pedido"),   
     path('pedido/<int:id>/', views.detalhes_pedido, name='detalhes_pedido'),   
     path('novo_pedido/<int:id>/', views.novo_pedido, name='novo_pedido'),
-    path('remover-iten-pedido/<int:id>/', views.remover_item_pedido, name="remover_item_pedido")
+    path('remover_pedido/<int:id>/', views.remover_pedido, name='remover_pedido'),
+    path('remover-item-pedido/<int:id>/', views.remover_item_pedido, name="remover_item_pedido"),
+    path('editar-item-pedido/<int:id>/', views.editar_item_pedido, name="editar_item_pedido"),
+    
+    path('registrar_pagamento/<int:id>/', views.registrar_pagamento, name="registrar_pagamento"),
+    path('nota-fiscal/<int:id>/', views.gerar_nota_fiscal, name="gerar_nota_fiscal"),
   
 
 ]

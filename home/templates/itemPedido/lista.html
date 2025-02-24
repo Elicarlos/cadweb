@@ -1,0 +1,71 @@
+{% extends 'base.html'%}
+{% block title %}Categorias{% endblock %}
+{% block cards %}
+<div class="d-flex justify-content-end  ">
+    <a class="btn btn-primary g-2 d=flex align-items-center" href="{% url 'cadastro-cliente' %}">
+        <i class="bi bi-plus-circle"></i><span class="ms-2">Cliente</span>
+    </a> 
+</div>    
+{% endblock %}
+
+{%  block titulo_page %}Categorias{% endblock %}
+{% block conteudo %}
+<table class="table table-bordered table-hover mx-auto">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th> 
+            <th scope="col">Nome</th>
+            <th scope="col">CPF</th>  
+            <th scope="col">Telefone</th> 
+            <th scope="col">Data Nascimento</th>          
+            <th scope="col">Açoes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lista in lista %}
+        <tr>
+            <td>{{ lista.id }}</td>
+            <td>{{ lista.nome }}</td>
+            <td>{{ lista.cpf }}</td>
+            <td>{{ lista.telefone }}</td>
+            <td>{{ lista.datanascimento }}</td>
+            <td style="width: 280px;">
+                <!-- <button data-id="{{ lista.id }}" onclick="detalhes(this)" class="btn btn-info">Detalhes</button>
+                <button data-id="{{ lista.id }}"  onclick="alterar(this)" class="btn btn-warning">Alterar</button>
+                <button data-id="{{ lista.id }}"  onclick="deletar(this)" class="btn btn-danger">Excluir</button> -->
+
+                <a href="{% url 'novo_pedido' lista.id %}" class="btn btn-success">
+                    <i class="bi bi-cart-plus"></i>
+                </a>
+                <a href="{% url 'editar_cliente' lista.id %}" class="btn btn-warning"><i class="bi bi-pencil"></i></a>
+                <a href="{% url 'excluir_cliente' lista.id %}" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                <!-- <button data-id="{{ lista.id }}"  onclick="location='{% url 'editar_categoria' lista.id %}'" class="btn btn-danger">Excluir</button> -->
+            </td>
+        </tr>
+        {% empty %}
+        <td colspan="4" align="center">
+            <p>Sem itens</p>
+        </td>
+        {% endfor %}
+        
+    </tbody>
+</table>
+<script>
+
+    function detalhes(button){
+        const id = button.getAttribute('data-id');
+        
+        fetch(`{% url 'detalhes_categoria' 0 %}` .replace('0', id), {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`)
+            }
+        })
+
+    }
+</script>
+
+
+{% endblock %}

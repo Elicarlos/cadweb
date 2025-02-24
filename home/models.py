@@ -53,7 +53,7 @@ class Estoque(Base):
 class Cliente(Base):
     nome = models.CharField(max_length=250)
     telefone = models.CharField(max_length=30)
-    cpf = models.CharField(max_length=20)
+    cpf = models.CharField(max_length=20, unique=True)
     datanasc = models.DateField(verbose_name="Data de nascimento", default="2024/11/03", null=True, blank=True)
     ativo = models.BooleanField(default=True)
     
@@ -87,10 +87,11 @@ class Pedido(Base):
         return f'{self.cliente}'
     
     @property
-    def data_pedido(self):
+    def data_pedidof(self): 
         if self.data_pedido:
-            return self.data_pedido.strftime('%d/%m/ %H:%M')        
-        return None
+            return self.data_pedido.strftime('%d/%m/%Y %H:%M')
+        return "Data não disponível"
+
     
     @property
     def total(self):
@@ -111,8 +112,19 @@ class Pedido(Base):
     #Calcula o total de todos os pagamentos do pedido
     @property
     def total_pago(self):
+        """Soma o total pago"""
         total = sum(pagamento.valor for pagamento in self.pagamentos.all())
-        return total    
+        return total or 0
+    
+    
+    @property
+    def status_display(self):
+        """Define o status corretamente baseado no pagamento"""
+        if self.total_pago >= self.total and self.total > 0:
+            return "Pago"
+        return self.get_status_display()
+
+   
     
     @property
     def debito(self):

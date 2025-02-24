@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block title %}Item Pedido{% endblock %}
+
+{%  block titulo_page %}Editar Item Pedido{% endblock %}
+{% block conteudo %}
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    <button class="btn btn-primary">Salvar</button>
+
+</form>
+
+{% endblock %}

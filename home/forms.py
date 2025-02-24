@@ -135,25 +135,46 @@ class ItemPedidoForm(forms.ModelForm):
         }
 
 
+from django import forms
+from .models import Pagamento
+
 class PagamentoForm(forms.ModelForm):
     class Meta:
         model = Pagamento
-        fields = ['pedido','forma','valor']
+        fields = ['pedido', 'forma', 'valor']
         widgets = {
             'pedido': forms.HiddenInput(),  # Campo oculto para armazenar o ID
-            # Usando Select para renderizar as opções
-            'forma': forms.Select(attrs={'class': 'form-control'}),  
-            'valor':forms.TextInput(attrs={
+            'forma': forms.Select(attrs={'class': 'form-control'}),  # Select para escolha da forma de pagamento
+            'valor': forms.TextInput(attrs={
                 'class': 'money form-control',
                 'maxlength': 500,
                 'placeholder': '0.000,00'
             }),
-         }
-        
-    def __init__(self, *args, **kwargs):
-            super(PagamentoForm, self).__init__(*args, **kwargs)
-            self.fields['valor'].localize = True
-            self.fields['valor'].widget.is_localized = True    
+        }
 
-    
+    def __init__(self, *args, **kwargs):
+        # Pegando o pedido do contexto
+        self.pedido = kwargs.pop('pedido', None)
+        super(PagamentoForm, self).__init__(*args, **kwargs)
+        self.fields['valor'].localize = True
+        self.fields['valor'].widget.is_localized = True    
+
+    def clean_valor(self):
+        """
+        Valida se o valor inserido não excede o valor restante do pedido.
+        """
+        valor = self.cleaned_data.get('valor')
+
+        if self.pedido:
+            total_devido = self.pedido.total - self.pedido.total_pago
+            if valor > total_devido:
+                raise forms.ValidationError(
+                    f"O valor do pagamento ({valor}) excede o total devido ({total_devido})."
+                )
+        
+        if valor <= 0:
+            raise forms.ValidationError("O valor do pagamento deve ser maior que zero.")
+
+        return valor
+
     
