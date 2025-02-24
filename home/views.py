@@ -417,10 +417,6 @@ def registrar_pagamento(request, id):
     }
     return render(request, 'pedido/pagamento.html', contexto)  
 
-
-from django.http import HttpResponse
-
-
 def gerar_nota_fiscal(request, id):
     pedido = Pedido.objects.get(pk=id)
 
@@ -466,8 +462,8 @@ def gerar_nota_fiscal(request, id):
         p.drawString(50, y, str(item.produto.id))  # Código do Produto
         p.drawString(120, y, item.produto.nome)  # Nome do Produto
         p.drawString(350, y, str(item.qtde))  # Quantidade
-        p.drawString(400, y, f"R$ {item.preco:.2f}")  # Preço Unitário
-        p.drawString(500, y, f"R$ {item.subtotal:.2f}")  # Total do Item
+        p.drawString(400, y, f"R$ {item.preco.quantize(Decimal('0.01'))}")  # Preço Unitário
+        p.drawString(500, y, f"R$ {item.subtotal.quantize(Decimal('0.01'))}")  # Total do Item
         y -= 20  # Move para a próxima linha
 
     # Linha Final Separadora
@@ -475,12 +471,12 @@ def gerar_nota_fiscal(request, id):
     y -= 20
 
     # Cálculos de Impostos
-    icms = pedido.total * Decimal("0.18")  # 18% de ICMS
-    pis = pedido.total * Decimal("0.02")  # 2% de PIS
-    ipi = pedido.total * Decimal("0.04")  # 4% de IPI
-    cofins = pedido.total * Decimal("0.075")  # 7,5% de COFINS
-    impostos_totais = icms + pis + ipi + cofins
-    valor_final = pedido.total + impostos_totais  # Valor total com impostos
+    icms = (pedido.total * Decimal("0.18")).quantize(Decimal("0.01"))  # 18% de ICMS
+    pis = (pedido.total * Decimal("0.02")).quantize(Decimal("0.01"))  # 2% de PIS
+    ipi = (pedido.total * Decimal("0.04")).quantize(Decimal("0.01"))  # 4% de IPI
+    cofins = (pedido.total * Decimal("0.075")).quantize(Decimal("0.01"))  # 7,5% de COFINS
+    impostos_totais = (icms + pis + ipi + cofins).quantize(Decimal("0.01"))
+    valor_final = (pedido.total + impostos_totais).quantize(Decimal("0.01"))  # Valor total com impostos
 
     # Tabela de Impostos Formatada
     p.setFont("Helvetica-Bold", 10)
@@ -517,6 +513,7 @@ def gerar_nota_fiscal(request, id):
     p.save()
 
     return response
+
 
 
 

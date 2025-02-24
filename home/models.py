@@ -1,3 +1,4 @@
+from decimal import Decimal
 import hashlib
 import locale
 from django.db import models
@@ -147,6 +148,30 @@ class Pedido(Base):
         produtos = self.itempedido_set.all()[:3]
         nomes_produtos = [item.produto.nome for item in produtos]
         return ", ".join(nomes_produtos)
+    
+    @property
+    def icms(self):
+        return (self.total * Decimal('0.18')).quantize(Decimal('0.01'))
+
+    @property
+    def ipi(self):
+        return (self.total * Decimal('0.05')).quantize(Decimal('0.01'))
+
+    @property
+    def pis(self):
+        return (self.total * Decimal('0.0165')).quantize(Decimal('0.01'))
+
+    @property
+    def cofins(self):
+        return (self.total * Decimal('0.076')).quantize(Decimal('0.01'))
+
+    @property
+    def total_impostos(self):
+        return self.icms + self.ipi + self.pis + self.cofins
+
+    @property
+    def total_com_impostos(self):
+        return self.total + self.total_impostos
 
 
     
