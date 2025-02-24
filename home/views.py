@@ -438,7 +438,7 @@ def gerar_nota_fiscal(request, id):
     data_pedido_str = pedido.data_pedidof  # Usa a nova propriedade corrigida
 
     
-    p.drawString(50, altura - 100, f"Pedido ID: {pedido.id}")
+    p.drawString(50, altura - 100, f"Pedido: {pedido.id}")
     p.drawString(50, altura - 120, f"Cliente: {pedido.cliente.nome}")
     p.drawString(50, altura - 140, f"Data do Pedido: {data_pedido_str}")
     p.drawString(50, altura - 160, f"Status: {pedido.get_status_display()}")
