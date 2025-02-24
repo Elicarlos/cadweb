@@ -1,3 +1,4 @@
+import hashlib
 import locale
 from django.db import models
 from django.conf import settings
@@ -85,6 +86,17 @@ class Pedido(Base):
     
     def __str__(self):
         return f'{self.cliente}'
+    
+    @property
+    def chave_acesso(self):
+        """
+        Gera uma chave de acesso única baseada no ID do pedido e na data do pedido.
+        A chave é um hash SHA256 dos valores concatenados.
+        """
+        data_str = self.data_pedido.strftime('%Y%m%d%H%M%S')
+        raw_string = f"{self.id}{data_str}"
+        hash_object = hashlib.sha256(raw_string.encode())
+        return hash_object.hexdigest()[:44] 
     
     @property
     def data_pedidof(self): 

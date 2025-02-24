@@ -9,6 +9,8 @@ from django.http import HttpResponse
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from .models import Pedido
+from decimal import Decimal
+
 
 
 def index(request):   
@@ -416,7 +418,7 @@ def registrar_pagamento(request, id):
     return render(request, 'pedido/pagamento.html', contexto)  
 
 
-
+from django.http import HttpResponse
 
 
 def gerar_nota_fiscal(request, id):
@@ -429,52 +431,94 @@ def gerar_nota_fiscal(request, id):
     p = canvas.Canvas(response, pagesize=A4)
     largura, altura = A4
 
-    # Título
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(200, altura - 50, "NOTA FISCAL")
+    # Título da Nota Fiscal
+    p.setFont("Helvetica-Bold", 14)
+    p.drawString(100, altura - 50, "DANFE - Documento Auxiliar da Nota Fiscal Eletrônica")
 
-    # Dados do Pedido
-    p.setFont("Helvetica", 12)
-    data_pedido_str = pedido.data_pedidof  # Usa a nova propriedade corrigida
+    # Chave de Acesso
+    p.setFont("Helvetica", 10)
+    p.drawString(50, altura - 80, f"CHAVE DE ACESSO: {pedido.chave_acesso}")
 
-    
-    p.drawString(50, altura - 100, f"Pedido: {pedido.id}")
-    p.drawString(50, altura - 120, f"Cliente: {pedido.cliente.nome}")
-    p.drawString(50, altura - 140, f"Data do Pedido: {data_pedido_str}")
-    p.drawString(50, altura - 160, f"Status: {pedido.get_status_display()}")
+    # Dados do Cliente
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(50, altura - 110, f"Destinatário: {pedido.cliente.nome}")
+    p.setFont("Helvetica", 10)
+    p.drawString(50, altura - 125, f"Data Nascimento: {pedido.cliente.datanasc.strftime('%d/%m/%Y')}")
+    p.drawString(50, altura - 140, f"CPF/CNPJ: {pedido.cliente.cpf}")
 
     # Linha Separadora
-    p.line(50, altura - 180, largura - 50, altura - 180)
+    p.line(50, altura - 150, largura - 50, altura - 150)
 
     # Cabeçalho da Tabela
-    y = altura - 200
-    p.drawString(50, y, "Produto")
-    p.drawString(300, y, "Quantidade")
-    p.drawString(400, y, "Preço Unitário (R$)")
-    p.drawString(500, y, "Subtotal (R$)")
-    
+    y = altura - 170
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(50, y, "Código")
+    p.drawString(120, y, "Descrição")
+    p.drawString(350, y, "Qtd")
+    p.drawString(400, y, "Valor Unitário")
+    p.drawString(500, y, "Total")
+
     y -= 20  # Espaço abaixo do cabeçalho
 
     # Itens do Pedido
+    p.setFont("Helvetica", 10)
     for item in pedido.itempedido_set.all():
-        p.drawString(50, y, item.produto.nome)
-        p.drawString(300, y, str(item.qtde))
-        p.drawString(400, y, f"R$ {item.preco:.2f}")
-        p.drawString(500, y, f"R$ {item.subtotal:.2f}")
+        p.drawString(50, y, str(item.produto.id))  # Código do Produto
+        p.drawString(120, y, item.produto.nome)  # Nome do Produto
+        p.drawString(350, y, str(item.qtde))  # Quantidade
+        p.drawString(400, y, f"R$ {item.preco:.2f}")  # Preço Unitário
+        p.drawString(500, y, f"R$ {item.subtotal:.2f}")  # Total do Item
         y -= 20  # Move para a próxima linha
 
     # Linha Final Separadora
     p.line(50, y, largura - 50, y)
     y -= 20
 
-    # Total do Pedido
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(400, y, "Total do Pedido:")
-    p.drawString(500, y, f"R$ {pedido.total:.2f}")
+    # Cálculos de Impostos
+    icms = pedido.total * Decimal("0.18")  # 18% de ICMS
+    pis = pedido.total * Decimal("0.02")  # 2% de PIS
+    ipi = pedido.total * Decimal("0.04")  # 4% de IPI
+    cofins = pedido.total * Decimal("0.075")  # 7,5% de COFINS
+    impostos_totais = icms + pis + ipi + cofins
+    valor_final = pedido.total + impostos_totais  # Valor total com impostos
 
+    # Tabela de Impostos Formatada
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(50, y, f"ICMS........:  R$ {icms:,.2f}")  # Separador correto
+    p.drawString(300, y, f"IPI.........:  R$ {ipi:,.2f}")
+    y -= 15
+    p.drawString(50, y, f"PIS.........:  R$ {pis:,.2f}")
+    p.drawString(300, y, f"COFINS......:  R$ {cofins:,.2f}")
+
+    # Separador grande
+    y -= 25
+    p.line(50, y, largura - 50, y)
+    y -= 20
+
+    # Totais Formatados
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(50, y, f"Total........:  R$ {pedido.total:,.2f}")
+    y -= 15
+    p.drawString(50, y, f"Impostos.....:  R$ {impostos_totais:,.2f}")
+    y -= 15
+    p.drawString(50, y, f"Valor Final..:  R$ {valor_final:,.2f}")
+
+    # Linha Separadora Final
+    y -= 30
+    p.line(50, y, largura - 50, y)
+    y -= 20
+
+    # Mensagem Final
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(50, y, "Recebemos os produtos constantes nesta nota fiscal.")
+
+    # Finaliza e salva o PDF
     p.showPage()
     p.save()
+
     return response
+
+
 
 
 
