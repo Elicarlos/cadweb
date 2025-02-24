@@ -41,14 +41,19 @@
         <td>{{ pedido.total }}</td>      
         <td>          
           <button onClick="location='{% url 'detalhes_pedido' pedido.id %}'" type="button" class="btn btn-primary btn-sm">Detalhes</button>
-          <a href="{% url 'remover_pedido' pedido.id %}" class="btn btn-danger btn-sm" 
-          onclick="return confirm('Tem certeza que deseja remover este registro?');">Remover</a>
+          {% if pedido.total_pago < pedido.total and pedido.status != pedido.CONCLUIDO %}
+        <a href="{% url 'remover_pedido' pedido.id %}" class="btn btn-danger btn-sm" 
+           onclick="return confirm('Tem certeza que deseja remover este registro?');">
+            <i class="fa fa-trash"></i> Remover
+        </a>
+    {% endif %}
 
-          {% if pedido.total_pago >= pedido.total %}
-            <a href="{% url 'gerar_nota_fiscal' pedido.id %}" class="btn btn-info btn-sm" target="_blank">
-              Imprimir Nota Fiscal
-            </a>
-          {% endif %}
+    <!-- Botão para imprimir nota fiscal (só aparece se o pedido estiver pago) -->
+    {% if pedido.total_pago >= pedido.total %}
+        <a href="{% url 'gerar_nota_fiscal' pedido.id %}" class="btn btn-info btn-sm" target="_blank">
+            <i class="fa fa-print"></i> Imprimir Nota Fiscal
+        </a>
+    {% endif %}
         </td>
       </tr>
     {% endfor %}
