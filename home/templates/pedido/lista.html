@@ -51,7 +51,7 @@
     <!-- Botão para imprimir nota fiscal (só aparece se o pedido estiver pago) -->
     {% if pedido.total_pago >= pedido.total %}
         <a href="{% url 'gerar_nota_fiscal' pedido.id %}" class="btn btn-info btn-sm" target="_blank">
-            <i class="fa fa-print"></i> Imprimir Nota Fiscal
+            <i class="fa fa-print"></i> Nota Fiscal
         </a>
     {% endif %}
         </td>
